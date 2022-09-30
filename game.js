@@ -1,6 +1,6 @@
-import Defender, { EvilWizard, Huntress, WizardPack } from "./defender.js";
+import { EvilWizard, Huntress, WizardPack } from "./defender.js";
 import Cell from "./cell.js";
-import Enemy, { Zombie } from "./enemy.js";
+import { Wiard } from "./enemy.js";
 import Resource from "./resource.js";
 import FloatMessages from "./floatMessages.js";
 import ControllBar from "./controllBar.js";
@@ -95,12 +95,10 @@ class Game {
         );
 
         this.defenders = this.defenders.filter(
-            (defender) => defender.health > 0
+            (defender) => !defender.makedForDeletion
         );
 
-        this.enemies = this.enemies.filter(
-            (enemy) => enemy.health > 0 && !enemy.makedForDeletion
-        );
+        this.enemies = this.enemies.filter((enemy) => !enemy.makedForDeletion);
         this.floatMessages = this.floatMessages.filter(
             (floatMessage) => floatMessage.spanLife < 50
         );
@@ -194,7 +192,7 @@ class Game {
             this.enemies = this.enemies.filter(
                 (enemy) => !enemy.makedForDeletion
             );
-            this.enemies.push(new Zombie(this));
+            this.enemies.push(new Wiard(this));
             this.enemies.sort((a, b) => a.y - b.y);
             this.enemyTimer = 0;
         } else {
@@ -244,13 +242,7 @@ class Game {
                         enemy.speed = enemy.movement;
                     }
 
-                    if (defender.health - enemy.dame <= 1) {
-                        setTimeout(() => {
-                            defender.health -= enemy.dame;
-                        }, 400);
-                    } else {
-                        defender.health -= enemy.dame;
-                    }
+                    defender.health -= enemy.dame;
                 }
             });
         });

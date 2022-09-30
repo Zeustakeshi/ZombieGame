@@ -3,6 +3,7 @@ const states = {
     ATK1: 1,
     ATK2: 2,
     DIE: 3,
+    RUN: 4,
 };
 
 class State {
@@ -29,13 +30,15 @@ class Idle extends State {
 class Atk extends State {
     constructor(character, maxFrameX, maxFrameY) {
         super("ATK", character, maxFrameX, maxFrameY);
-        4;
     }
 }
 
 class Die extends State {
     constructor(character, maxFrameX, maxFrameY, src) {
         super("DIE", character, maxFrameX, maxFrameY, src);
+    }
+    enter() {
+        this.character.img.src = `${this.character.rootSrc}/Death.png`;
     }
 }
 
@@ -52,7 +55,7 @@ export class IdleDefender extends Idle {
     handleChangeState() {
         if (this.character.isAtk) {
             this.character.setState(states.ATK1);
-        } else if (this.character.health < 10) {
+        } else if (this.character.health < 1) {
             this.character.setState(states.DIE);
         }
     }
@@ -71,7 +74,7 @@ export class Atk1Defender extends Atk {
     handleChangeState() {
         if (!this.character.isAtk) {
             this.character.setState(states.IDLE);
-        } else if (this.character.health < 10) {
+        } else if (this.character.health < 1) {
             this.character.setState(states.DIE);
         } else {
             this.character.game.enemies.forEach((enemy) => {
@@ -96,7 +99,7 @@ export class Atk2Defender extends Atk {
     handleChangeState() {
         if (!this.character.isAtk) {
             this.character.setState(states.IDLE);
-        } else if (this.character.health < 10) {
+        } else if (this.character.health < 1) {
             this.character.setState(states.DIE);
         }
     }
@@ -106,9 +109,29 @@ export class DieDefender extends Die {
     constructor(character, maxFrameX, maxFrameY) {
         super(character, maxFrameX, maxFrameY);
     }
+}
+
+export class DieEnemy extends Die {
+    constructor(character, maxFrameX, maxFrameY) {
+        super(character, maxFrameX, maxFrameY);
+    }
+    enter() {
+        this.character.img.src = `${this.character.rootSrc}/Death.png`;
+    }
+}
+
+export class RunEnemy extends State {
+    constructor(character, maxFrameX, maxFrameY) {
+        super("RUN", character, maxFrameX, maxFrameY);
+    }
 
     enter() {
         super.enter();
-        this.character.img.src = `${this.character.rootSrc}/Death.png`;
+        this.character.img.src = `${this.character.rootSrc}/Run.png`;
+    }
+    handleChangeState() {
+        if (this.character.health < 1) {
+            this.character.setState(states.DIE);
+        }
     }
 }

@@ -20,7 +20,10 @@ class Defender {
         this.fps = 18;
         this.interval = 1500 / this.fps;
         this.isAtk = false;
+        this.attackRange = this.x + this.game.width * 0.5;
         this.dame = 20;
+        this.slowEnemy = 0;
+        this.makedForDeletion = false;
 
         this.states = [];
         this.currentState = this.states[0];
@@ -77,12 +80,17 @@ class Defender {
     }
 
     update() {
+        if (this.health <= 0) {
+            setTimeout(() => {
+                this.makedForDeletion = true;
+            }, 400);
+        }
         this.isAtk = this.game.enemies.some(
             (enemy) =>
                 enemy.y > this.y - this.game.cellGap &&
                 enemy.y + enemy.height <
                     this.y + this.height + this.game.cellGap &&
-                enemy.x < this.x + this.game.width * 0.5
+                enemy.x < this.attackRange
         );
 
         this.currentState.handleChangeState();
@@ -124,8 +132,12 @@ class Defender {
         this.projectiles.forEach((projectile) => {
             this.game.enemies.forEach((enemy) => {
                 if (this.game.collider(enemy, projectile)) {
-                    enemy.health -= projectile.dame;
+                    if (enemy.health > 0) {
+                        enemy.health -= projectile.dame;
+                    }
+                    // enemy.health -= projectile.dame;
                     projectile.makedForDeletion = true;
+                    enemy.speed -= enemy.speed * this.slowEnemy;
                 }
             });
         });
@@ -154,6 +166,7 @@ export class EvilWizard extends Defender {
         this.maxFrameX = 7;
         this.maxFrameY = 0;
         this.dame = 80;
+        this.attackRange = this.x + this.game.width * 0.4;
         this.health = 100;
         this.padding = 80;
         this.scale = 1.1;
@@ -184,6 +197,7 @@ export class WizardPack extends Defender {
         this.maxFrameX = 5;
         this.maxFrameY = 0;
         this.dame = 100;
+        this.attackRange = this.x + this.game.width * 0.25;
         this.health = 200;
         this.padding = 50;
         this.scale = 1;
@@ -215,7 +229,9 @@ export class Huntress extends Defender {
         this.maxFrameX = 9;
         this.maxFrameY = 0;
         this.dame = 5;
+        this.slowEnemy = 0.009;
         this.health = 80;
+
         this.padding = 20;
         this.scale = 2;
         this.fps = 20;
