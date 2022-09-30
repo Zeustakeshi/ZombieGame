@@ -40,21 +40,28 @@ class ControllBar {
                 src: "assets/defenders/Huntress 2/Idle.png",
                 width: 100,
                 height: 100,
-                cost: 100,
+                cost: 500,
+            },
+            {
+                name: "WORM",
+                src: "assets/defenders/Worm/Idle.png",
+                width: 90,
+                height: 90,
+                cost: 1000,
             },
             {
                 name: "EVILWIZARD",
                 src: "assets/defenders/EVil Wizard 2/Idle.png",
                 width: 250,
                 height: 250,
-                cost: 300,
+                cost: 1800,
             },
             {
                 name: "WIZARDPACK",
                 src: "assets/defenders/Wizard Pack/Idle.png",
                 width: 231,
                 height: 190,
-                cost: 500,
+                cost: 2000,
             },
         ];
 

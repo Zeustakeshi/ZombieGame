@@ -1,5 +1,5 @@
 class Projectile {
-    constructor(game, charater, x, y) {
+    constructor(game, charater, x, y, scale, padding) {
         this.game = game;
         this.charater = charater;
 
@@ -16,7 +16,8 @@ class Projectile {
         this.interval = 1000 / this.fps;
         this.frameX = 0;
         this.maxFrame = 2;
-        this.scale = 3;
+        this.scale = scale;
+        this.padding = padding;
     }
 
     draw(maxFrame, spriteWidth, spriteHeight) {
@@ -33,8 +34,8 @@ class Projectile {
             0,
             this.spriteWidth,
             this.spriteHeight,
-            this.x,
-            this.y,
+            this.x - this.padding * this.scale,
+            this.y - this.padding * this.scale,
             this.width,
             this.height
         );

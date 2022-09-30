@@ -1,16 +1,17 @@
-import { EvilWizard, Huntress, WizardPack } from "./defender.js";
+import { EvilWizard, Huntress, WizardPack, Worm } from "./defender.js";
 import Cell from "./cell.js";
-import { Wiard } from "./enemy.js";
+import { BolbMinion, Wiard } from "./enemy.js";
 import Resource from "./resource.js";
 import FloatMessages from "./floatMessages.js";
 import ControllBar from "./controllBar.js";
 import Background from "./backgound.js";
+import { GAME_HEIGHT, GAME_WIDTH } from "./const.js";
 
 class Game {
     constructor() {
         this.canvas = document.getElementById("canvas");
-        this.width = this.canvas.width = 1200;
-        this.height = this.canvas.height = 600;
+        this.width = this.canvas.width = GAME_WIDTH;
+        this.height = this.canvas.height = GAME_HEIGHT;
         this.position = this.canvas.getBoundingClientRect();
         this.ctx = this.canvas.getContext("2d");
 
@@ -51,7 +52,6 @@ class Game {
         //handle
         this.checkMousePositon();
         this.createCells();
-        this.createEnemy();
         this.createDefender();
         this.handleResize();
 
@@ -153,6 +153,7 @@ class Game {
                         20
                     )
                 );
+
                 return;
             }
 
@@ -180,18 +181,24 @@ class Game {
                         new Huntress(this, defenderPos.x, defenderPos.y)
                     );
                     break;
+                case "WORM":
+                    this.defenders.push(
+                        new Worm(this, defenderPos.x, defenderPos.y)
+                    );
+                    break;
                 default:
                     break;
             }
+            this.defenders.sort((a, b) => a.y - b.y);
             this.numberOfResources -= this.defenderCost;
         });
     }
 
     createEnemy() {
         if (this.enemyTimer > this.enemyInterval) {
-            this.enemies = this.enemies.filter(
-                (enemy) => !enemy.makedForDeletion
-            );
+            if (Math.floor(this.enemyTimer) % 5 === 0) {
+                this.enemies.push(new BolbMinion(this));
+            }
             this.enemies.push(new Wiard(this));
             this.enemies.sort((a, b) => a.y - b.y);
             this.enemyTimer = 0;

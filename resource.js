@@ -14,46 +14,46 @@ class Resource {
         this.height = this.game.cellSize - this.game.cellGap;
 
         this.values = [50, 80, 100, 200];
-        this.value =
-            this.values[Math.floor(Math.random() * (this.values.length - 1))];
-
+        this.value = Math.floor(Math.random() * this.values.length);
         this.makedForDeletion = false;
 
         this.img = new Image();
-        this.img.src = "assets/resource.png";
-        this.spriteWidth = 120;
-        this.spriteHieght = 107;
+        this.img.src = "assets/resources/Chests.png";
+        this.spriteWidth = 48;
+        this.spriteHeight = 32;
         this.frameX = 0;
-        this.maxFrame = 3;
+        this.frameY = this.value * 2;
+        this.maxFrameX = 4;
+        this.maxFrameY = 7;
         this.timer = 0;
-        this.fps = 20;
+        this.fps = 10;
         this.interval = 1000 / this.fps;
 
         this.handleClick();
+        this.states = ["OPEN", "CLOSE"];
+        this.currentState = this.states[1];
     }
 
     draw() {
-        this.game.ctx.fillStyle = "green";
-        // this.game.ctx.fillRect(this.x, this.y, this.width, this.height);
         this.game.ctx.drawImage(
             this.img,
             this.frameX * this.spriteWidth,
-            0,
+            this.frameY * this.spriteHeight,
             this.spriteWidth,
-            this.spriteHieght,
+            this.spriteHeight,
             this.x,
             this.y,
             this.width,
             this.height
         );
-        this.game.ctx.font = "600 28px Markazi";
-        this.game.ctx.fillStyle = "red";
-        this.game.ctx.fillText(this.value, this.x, this.y);
+        // this.game.ctx.font = "600 28px Markazi";
+        // this.game.ctx.fillStyle = "red";
+        // this.game.ctx.fillText(this.value, this.x, this.y);
     }
 
     update() {
         if (this.timer > this.interval) {
-            this.frameX < this.maxFrame ? this.frameX++ : (this.frameX = 0);
+            this.frameX < this.maxFrameX ? this.frameX++ : (this.frameX = 0);
             this.timer = 0;
         } else {
             this.timer += this.game.deltaTime;
@@ -64,28 +64,25 @@ class Resource {
         this.game.canvas.addEventListener("click", () => {
             if (this.makedForDeletion) return;
             if (this.game.collider(this, this.game.mouse)) {
-                this.game.numberOfResources += this.value;
+                this.game.numberOfResources += this.values[this.value];
                 this.game.floatMessages.push(
                     new FloatMessages(
                         this.game,
-                        `+${this.value}`,
+                        `+${this.values[this.value]}`,
                         this.x,
                         this.y,
                         "red",
                         30
                     )
                 );
-                this.makedForDeletion = true;
+                if (this.currentState === this.states[1]) {
+                    this.frameY++;
+                    this.frameX = 0;
+                }
+                setTimeout(() => {
+                    this.makedForDeletion = true;
+                }, 400);
             }
-
-            // this.game.cellGrid.forEach((cell) => {
-            //     if (
-            //         cell.x === this.x  &&
-            //         cell.y === this.y - this.game.cellGap
-            //     ) {
-            //         cell.emty = true;
-            //     }
-            // });
         });
     }
 }

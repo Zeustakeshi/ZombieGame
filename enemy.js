@@ -1,3 +1,4 @@
+import { ENEMY } from "./const.js";
 import FloatMessages from "./floatMessages.js";
 import { DieEnemy, RunEnemy } from "./states.js";
 
@@ -104,7 +105,6 @@ export class Wiard extends Enemy {
         this.maxFrameX = 2;
         this.spriteWidth = 80;
         this.spriteHeight = 80;
-        this.health = 500;
         this.fps = 5;
         this.interval = 1000 / this.fps;
         this.scale = 1.5;
@@ -117,6 +117,37 @@ export class Wiard extends Enemy {
             new RunEnemy(this, 2, 0),
         ];
         this.currentState = this.states[4];
+        this.health = ENEMY.wiard.health;
+        this.dame = ENEMY.wiard.dame;
+        this.speed = ENEMY.wiard.speed;
+        this.movement = this.speed;
+    }
+}
+
+export class BolbMinion extends Enemy {
+    constructor(game) {
+        super(game);
+        this.rootSrc = "assets/enemies/blob-minion";
+        this.img.src = `${this.rootSrc}/Run.png`;
+        this.maxFrameX = 7;
+        this.spriteWidth = 80;
+        this.spriteHeight = 40;
+        this.fps = 10;
+        this.interval = 1000 / this.fps;
+        this.scale = 2;
+        this.padding = -8;
+        this.states = [
+            null,
+            null,
+            null,
+            new DieEnemy(this, 5, 0),
+            new RunEnemy(this, 7, 0),
+        ];
+        this.currentState = this.states[4];
+        this.health = ENEMY.bolbMinion.health;
+        this.dame = ENEMY.bolbMinion.dame;
+        this.speed = ENEMY.bolbMinion.speed;
+        this.movement = this.speed;
     }
 }
 
