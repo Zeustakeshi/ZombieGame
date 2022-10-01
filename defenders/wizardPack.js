@@ -13,6 +13,7 @@ export default class WizardPack extends Defender {
         this.rootSrc = "assets/defenders/Wizard Pack";
         this.img.src = `${this.rootSrc}/Idle.png`;
 
+        this.health = DEFENDER.wizardPack.health;
         this.skills = DEFENDER.wizardPack.skills;
         this.states = [
             new IdleDefender(this, 5, 0),
@@ -23,13 +24,7 @@ export default class WizardPack extends Defender {
         this.currentState = this.states[0];
         this.maxFrameX = 5;
         this.maxFrameY = 0;
-
-        this.dame = DEFENDER.wizardPack.dame;
-        this.attackRange = DEFENDER.wizardPack.attackRange;
-        this.health = DEFENDER.wizardPack.health;
-        this.slowEnemy = DEFENDER.wizardPack.slowEnemy;
-        this.atkSpeed = DEFENDER.wizardPack.attackSpeed;
-        this.atkInterval = 1000 / (this.atkSpeed * this.fps);
+        this.attackRange = this.checkAtkRange();
 
         this.padding = 50;
         this.scale = 1;

@@ -1,90 +1,93 @@
 export const GAME_WIDTH = 1200;
 export const GAME_HEIGHT = 600;
 
-//attackRange < 20 ? Combatant : Archer
-
 export const DEFENDER = {
     huntress: {
-        dame: 5,
-        slowEnemy: 0.01,
         health: 100,
-        attackRange: GAME_WIDTH * 0.5,
-        attackSpeed: 0.2,
         skills: [
             {
                 name: "ATK1",
-                attackRange: GAME_WIDTH * 0.5,
-                dame: 5,
                 src: "Attack1.png",
+                dame: 5,
+                slowEnemy: 0.01,
+                attackSpeed: 0.2,
+                attackRange: GAME_WIDTH * 0.5,
             },
             {
                 name: "ATK2",
-                attackRange: 50,
-                dame: 5,
                 src: "Attack2.png",
+                dame: 5,
+                slowEnemy: 0.01,
+                attackSpeed: 0.2,
+                attackRange: 50,
             },
         ],
     },
     worm: {
-        dame: 50,
-        slowEnemy: 0.009,
         health: 200,
-        attackRange: GAME_WIDTH * 0.4,
-        attackSpeed: 0.15,
         skills: [
             {
                 name: "ATK1",
-                attackRange: GAME_WIDTH * 0.4,
-                dame: 50,
                 src: "Attack1.png",
+                dame: 50,
+                slowEnemy: 0.009,
+                attackSpeed: 0.15,
+                attackRange: GAME_WIDTH * 0.4,
             },
             {
                 name: "ATK2",
-                attackRange: 50,
-                dame: 50,
                 src: "Attack2.png",
+                dame: 50,
+                slowEnemy: 0.009,
+                attackSpeed: 0.15,
+                attackRange: 50,
             },
         ],
     },
     evilWizard: {
-        dame: 100,
-        slowEnemy: 0,
         health: 300,
-        attackRange: GAME_WIDTH * 0.3,
-        attackSpeed: 0.1,
+
         skills: [
             {
                 name: "ATK1",
+                src: "Attack1.png",
                 attackRange: GAME_WIDTH * 0.5,
                 dame: 5,
+                slowEnemy: 0,
+                attackSpeed: 0.1,
+                attackRange: GAME_WIDTH * 0.4,
             },
             {
                 name: "ATK2",
+                src: "Attack2.png",
                 attackRange: 50,
                 dame: 5,
+                slowEnemy: 0,
+                attackSpeed: 0.1,
+                attackRange: GAME_WIDTH * 0.3,
             },
         ],
     },
     wizardPack: {
-        dame: 150,
-        slowEnemy: 0,
         health: 500,
-        attackRange: GAME_WIDTH * 0.2,
-        attackSpeed: 0.1,
         skills: [
             {
                 name: "ATK1",
-                attackRange: GAME_WIDTH * 0.5,
-                dame: 5,
                 src: "Attack1.png",
+                dame: 100,
+                slowEnemy: 0,
+                attackSpeed: 0.1,
+                attackRange: GAME_WIDTH * 0.5,
             },
 
-            // {
-            //     name: "ATK2",
-            //     attackRange: GAME_WIDTH * 0.2,
-            //     dame: 5,
-            //     src: "Attack2.png",
-            // },
+            {
+                name: "ATK2",
+                src: "Attack2.png",
+                dame: 5,
+                slowEnemy: 0,
+                attackSpeed: 0.1,
+                attackRange: GAME_WIDTH * 0.2,
+            },
         ],
     },
 };

@@ -1,15 +1,12 @@
-import { Atk, states } from "../../state.js";
+import { DefnederAtk, states } from "../../state.js";
 
-export default class Atk2Defender extends Atk {
+export default class Atk2Defender extends DefnederAtk {
     constructor(character, maxFrameX, maxFrameY) {
-        super("ATK2", character, maxFrameX, maxFrameY);
+        super("ATK2", character, maxFrameX, maxFrameY, 1);
     }
 
     enter() {
         super.enter();
-        this.skill = this.characterSkills[1];
-        this.character.img.src = `${this.character.rootSrc}/${this.skill.src}`;
-        this.character.dame = this.skill.dame;
     }
 
     handleChangeState() {

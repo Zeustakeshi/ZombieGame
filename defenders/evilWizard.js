@@ -12,6 +12,9 @@ export default class EvilWizard extends Defender {
         this.spriteHeight = 250;
         this.rootSrc = "assets/defenders/EVil Wizard 2";
         this.img.src = `${this.rootSrc}/Idle.png`;
+
+        this.health = DEFENDER.evilWizard.health;
+        this.skills = DEFENDER.evilWizard.skills;
         this.states = [
             new IdleDefender(this, 7, 0),
             new Atk1Defender(this, 7, 0),
@@ -21,16 +24,11 @@ export default class EvilWizard extends Defender {
         this.currentState = this.states[0];
         this.maxFrameX = 7;
         this.maxFrameY = 0;
-
-        this.dame = DEFENDER.evilWizard.dame;
-        this.attackRange = DEFENDER.evilWizard.attackRange;
-        this.health = DEFENDER.evilWizard.health;
-        this.slowEnemy = DEFENDER.evilWizard.slowEnemy;
-        this.atkSpeed = DEFENDER.evilWizard.attackSpeed;
-        this.atkInterval = 1000 / (this.atkSpeed * this.fps);
+        this.attackRange = this.checkAtkRange();
 
         this.padding = 80;
         this.scale = 1.1;
+
         this.projectileDetail = {
             padding: 0,
             x: this.x + this.width,

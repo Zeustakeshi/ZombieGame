@@ -95,9 +95,8 @@ class Defender {
             (enemy) =>
                 enemy.y > this.y - this.game.cellGap &&
                 enemy.y + enemy.height <
-                    this.y + this.height + this.game.cellGap
-            //      &&
-            // enemy.x < this.x + this.attackRange
+                    this.y + this.height + this.game.cellGap &&
+                enemy.x < this.x + this.attackRange
         );
 
         this.currentState.handleChangeState();
@@ -162,6 +161,15 @@ class Defender {
     setState(state) {
         this.currentState = this.states[state];
         this.currentState.enter();
+    }
+
+    checkAtkRange() {
+        return this.skills.reduce((prev, curr) => {
+            return Math.max(prev.attackRange, curr.attackRange) ===
+                prev.attackRange
+                ? prev
+                : curr;
+        }).attackRange;
     }
 }
 

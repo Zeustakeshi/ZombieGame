@@ -14,6 +14,8 @@ export default class Worm extends Defender {
         this.img.src = `${this.rootSrc}/Idle.png`;
         this.skills = DEFENDER.worm.skills;
 
+        this.health = DEFENDER.worm.health;
+        this.skills = DEFENDER.worm.skills;
         this.states = [
             new IdleDefender(this, 8, 0),
             new Atk1Defender(this, 15, 0),
@@ -23,16 +25,11 @@ export default class Worm extends Defender {
         this.currentState = this.states[0];
         this.maxFrameX = 8;
         this.maxFrameY = 0;
-
-        // this.dame = DEFENDER.worm.dame;
-        this.attackRange = DEFENDER.worm.attackRange;
-        this.health = DEFENDER.worm.health;
-        this.slowEnemy = DEFENDER.worm.slowEnemy;
-        this.atkSpeed = DEFENDER.worm.attackSpeed;
-        this.atkInterval = 1000 / (this.atkSpeed * this.fps);
+        this.attackRange = this.checkAtkRange();
 
         this.padding = 10;
         this.scale = 1.8;
+
         this.projectileDetail = {
             padding: 10,
             x: this.x + this.width,

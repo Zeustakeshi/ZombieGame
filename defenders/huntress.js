@@ -13,6 +13,9 @@ export default class Huntress extends Defender {
         this.spriteHeight = 100;
         this.rootSrc = "assets/defenders/Huntress 2";
         this.img.src = `${this.rootSrc}/Idle.png`;
+
+        this.health = DEFENDER.huntress.health;
+        this.skills = DEFENDER.huntress.skills;
         this.states = [
             new IdleDefender(this, 9, 0),
             new Atk1Defender(this, 5, 0),
@@ -22,13 +25,7 @@ export default class Huntress extends Defender {
         this.currentState = this.states[0];
         this.maxFrameX = 9;
         this.maxFrameY = 0;
-
-        this.dame = DEFENDER.huntress.dame;
-        this.slowEnemy = DEFENDER.huntress.slowEnemy;
-        this.health = DEFENDER.huntress.health;
-        this.attackRange = DEFENDER.huntress.attackRange;
-        this.atkSpeed = DEFENDER.huntress.attackSpeed;
-        this.atkInterval = 1000 / (this.atkSpeed * this.fps);
+        this.attackRange = this.checkAtkRange();
 
         this.padding = 20;
         this.scale = 2;
