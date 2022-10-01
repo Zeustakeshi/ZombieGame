@@ -9,17 +9,44 @@ body {
     background: #1e293b;
 }
 
+#game {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 #canvas {
-    background: #fff;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    background: #fff;
     border: 1px solid #000;
+    min-width: 1200px;
+    min-height: 600px;
     max-width: 100%;
     max-height: 100%;
-    width: 1200px;
-    height: 600px;
+}
+
+#button-play {
+    z-index: 100;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    padding: 10px;
+    border: none;
+    outline: none;
+    background: #f62682;
+    font-size: 40px;
+    font-weight: 600;
+    color: #fff;
+    width: 300px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 #fullscreen {

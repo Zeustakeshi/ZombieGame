@@ -1,3 +1,5 @@
+import { DEFENDER } from "./const.js";
+
 class ControllBar {
     constructor(game) {
         this.game = game;
@@ -6,6 +8,9 @@ class ControllBar {
         this.statusWidth = this.game.cellSize * 2;
         this.options = [];
         this.currentOption = this.options[0];
+        this.counter = 20;
+        this.lastSeconds = 0;
+        this.playBtn = new ButtonPlay(this.game);
         this.handeOptionDefender();
     }
 
@@ -15,10 +20,26 @@ class ControllBar {
         // this.game.ctx.fillRect(0, 0, this.width, this.height);
         this.drawStatus();
         this.options.forEach((option) => option.draw());
+        this.drawCounter(
+            this.game.width - this.game.cellSize,
+            this.game.cellSize * 0.5
+        );
+        this.playBtn.draw();
+    }
+
+    drawCounter(x, y) {
+        this.game.ctx.save();
+        this.game.ctx.font = `600 24px Markazi`;
+        this.game.ctx.textAlign = "center";
+
+        this.game.ctx.fillStyle = "#fff";
+        this.game.ctx.fillText(`⏰: ${this.game.counter}`, x, y);
+        this.game.ctx.restore();
     }
 
     drawStatus() {
         this.game.ctx.fillStyle = "#fff";
+        this.game.ctx.font = `600 24px Markazi`;
         this.game.ctx.fillText(
             `Resources: ${this.game.numberOfResources}`,
             20,
@@ -34,51 +55,20 @@ class ControllBar {
     }
 
     handeOptionDefender() {
-        const options = [
-            {
-                name: "HUNTRESS",
-                src: "assets/defenders/Huntress 2/Idle.png",
-                width: 100,
-                height: 100,
-                cost: 500,
-            },
-            {
-                name: "WORM",
-                src: "assets/defenders/Worm/Idle.png",
-                width: 90,
-                height: 90,
-                cost: 1000,
-            },
-            {
-                name: "EVILWIZARD",
-                src: "assets/defenders/EVil Wizard 2/Idle.png",
-                width: 250,
-                height: 250,
-                cost: 1800,
-            },
-            {
-                name: "WIZARDPACK",
-                src: "assets/defenders/Wizard Pack/Idle.png",
-                width: 231,
-                height: 190,
-                cost: 2000,
-            },
-        ];
-
-        options.forEach((option, index) => {
+        for (const [, character] of Object.entries(DEFENDER)) {
             this.options.push(
                 new Option(
                     this.game,
-                    this.game.cellSize * (index + 3) + this.game.cellGap,
+                    this.game.cellSize * (character.id + 2) + this.game.cellGap,
                     this.game.cellGap,
-                    option.width,
-                    option.height,
-                    option.src,
-                    option.cost,
-                    option.name
+                    character.spriteWidth,
+                    character.spriteHeight,
+                    `${character.rootSrc}/Idle.png`,
+                    character.cost,
+                    character.name
                 )
             );
-        });
+        }
 
         this.currentOption = this.options[0];
     }
@@ -140,6 +130,41 @@ class Option {
         this.game.canvas.addEventListener("click", () => {
             if (this.game.collider(this, this.game.mouse)) {
                 this.game.controllBar.currentOption = this;
+                console.log("dsa");
+            }
+        });
+    }
+}
+
+class ButtonPlay {
+    constructor(game, x, y) {
+        this.game = game;
+        this.x =
+            this.game.width - (this.game.cellSize + this.game.cellGap) * 2 - 20;
+        this.y = 0;
+        this.width = this.game.cellSize - this.game.cellGap;
+        this.height = this.game.cellSize - this.game.cellGap;
+        this.onClick();
+    }
+
+    draw() {
+        this.game.ctx.save();
+        this.game.ctx.font = `600 24px Markazi`;
+        this.game.ctx.textAlign = "center";
+        // this.game.ctx.fillRect(this.x, this.y, this.width, this.height);
+        this.game.ctx.fillText(
+            `play`,
+            this.x + this.game.cellSize * 0.5,
+            this.y + this.game.cellSize * 0.5
+        );
+        this.game.ctx.restore();
+    }
+
+    onClick() {
+        this.game.canvas.addEventListener("click", () => {
+            if (this.game.collider(this, this.game.mouse)) {
+                console.log("asd");
+                this.game.counter = 0;
             }
         });
     }

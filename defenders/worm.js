@@ -8,9 +8,9 @@ import Defender from "./defender.js";
 export default class Worm extends Defender {
     constructor(game, x, y) {
         super(game, x, y);
-        this.spriteWidth = 90;
-        this.spriteHeight = 90;
-        this.rootSrc = "assets/defenders/Worm";
+        this.spriteWidth = DEFENDER.worm.spriteHeight;
+        this.spriteHeight = DEFENDER.worm.spriteWidth;
+        this.rootSrc = DEFENDER.worm.rootSrc;
         this.img.src = `${this.rootSrc}/Idle.png`;
         this.skills = DEFENDER.worm.skills;
 

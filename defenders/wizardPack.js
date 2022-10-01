@@ -8,9 +8,9 @@ import Defender from "./defender.js";
 export default class WizardPack extends Defender {
     constructor(game, x, y) {
         super(game, x, y);
-        this.spriteWidth = 231;
-        this.spriteHeight = 190;
-        this.rootSrc = "assets/defenders/Wizard Pack";
+        this.spriteWidth = DEFENDER.wizardPack.spriteWidth;
+        this.spriteHeight = DEFENDER.wizardPack.spriteHeight;
+        this.rootSrc = DEFENDER.wizardPack.rootSrc;
         this.img.src = `${this.rootSrc}/Idle.png`;
 
         this.health = DEFENDER.wizardPack.health;

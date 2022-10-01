@@ -79,7 +79,7 @@ export default class Enemy {
         }
 
         if (this.health <= 0 && this.makedForDeletion) {
-            this.game.numberOfResources += this.maxHealth * 0.5;
+            // this.game.numberOfResources += this.maxHealth * 0.5;
             this.game.score += 1;
             this.game.floatMessages.push(
                 new FloatMessages(

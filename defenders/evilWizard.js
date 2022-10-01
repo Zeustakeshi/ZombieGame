@@ -8,9 +8,9 @@ import Defender from "./defender.js";
 export default class EvilWizard extends Defender {
     constructor(game, x, y) {
         super(game, x, y);
-        this.spriteWidth = 250;
-        this.spriteHeight = 250;
-        this.rootSrc = "assets/defenders/EVil Wizard 2";
+        this.spriteWidth = DEFENDER.evilWizard.spriteHeight;
+        this.spriteHeight = DEFENDER.evilWizard.spriteWidth;
+        this.rootSrc = DEFENDER.evilWizard.rootSrc;
         this.img.src = `${this.rootSrc}/Idle.png`;
 
         this.health = DEFENDER.evilWizard.health;

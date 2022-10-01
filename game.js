@@ -20,15 +20,19 @@ class Game {
         this.ctx = this.canvas.getContext("2d");
 
         //state
-        this.numberOfResources = 10000;
+        this.numberOfResources = 20000;
+        this.maxNumberOfResources = this.numberOfResources;
         this.deltaTime = 0;
         this.lastTime = 0;
         this.score = 0;
         this.gameOver = false;
+        this.counter = 20;
+        this.maxCounter = this.counter;
+        this.lastSeconds = 0;
         //mouse
         this.mouse = {
-            width: 0.1,
-            height: 0.1,
+            width: 100,
+            height: 100,
             x: undefined,
             y: undefined,
         };
@@ -40,7 +44,6 @@ class Game {
         this.controllBar = new ControllBar(this);
         //defender
         this.defenders = [];
-        this.defenderCost = 200;
         // enemy
         this.enemies = [];
         this.enemyInterval = 3000;
@@ -57,16 +60,16 @@ class Game {
         this.checkMousePositon();
         this.createCells();
         this.createDefender();
-        this.handleResize();
 
+        this.handleResize();
         // handle full screen
         this.fullScreenButton = document.getElementById("fullscreen");
 
         this.fullScreenButton.addEventListener("click", () => {
             this.toggleFullScreen();
         });
-
         this.update(0);
+        // this.draw();
     }
 
     draw() {
@@ -81,32 +84,17 @@ class Game {
 
     update(timeStamp) {
         this.ctx.clearRect(0, 0, this.width, this.height);
-        this.deltaTime = timeStamp - this.lastTime;
-        this.lastTime = timeStamp;
+        this.caculateDeltaTime(timeStamp);
 
-        this.colliderEnemyAndDefender();
-
-        this.defenders.forEach((defender) => defender.update());
-        this.enemies.forEach((enemy) => enemy.update());
-        // this.resources.forEach((resource) => resource.update());
-
-        this.createEnemy();
-        this.createResource();
-        this.resources = this.resources.filter(
-            (resource) => !resource.makedForDeletion
-        );
-
-        this.defenders = this.defenders.filter(
-            (defender) => !defender.makedForDeletion
-        );
-
-        this.enemies = this.enemies.filter((enemy) => !enemy.makedForDeletion);
-        this.floatMessages = this.floatMessages.filter(
-            (floatMessage) => floatMessage.spanLife < 50
-        );
-
-        this.floatMessages.forEach((floatMessage) => floatMessage.update());
-        this.resources.forEach((resource) => resource.update());
+        this.handleDefender();
+        this.handleResource();
+        this.handleFloatMessage();
+        if (this.counter <= 0) {
+            this.colliderEnemyAndDefender();
+            this.handleEnemy();
+        } else {
+            this.caculateCounter();
+        }
         this.draw();
 
         if (!this.gameOver) {
@@ -116,9 +104,52 @@ class Game {
         }
     }
 
+    caculateDeltaTime(timeStamp) {
+        this.deltaTime = timeStamp - this.lastTime;
+        this.lastTime = timeStamp;
+    }
+
+    caculateCounter() {
+        const currSeconds = this.getSeconds();
+        if (this.lastSeconds !== currSeconds) {
+            this.counter--;
+            this.lastSeconds = currSeconds;
+        }
+    }
+
+    handleEnemy() {
+        this.enemies.forEach((enemy) => enemy.update());
+        this.createEnemy();
+        this.enemies = this.enemies.filter((enemy) => !enemy.makedForDeletion);
+    }
+
+    handleDefender() {
+        this.defenders.forEach((defender) => defender.update());
+        this.defenders = this.defenders.filter(
+            (defender) => !defender.makedForDeletion
+        );
+    }
+
+    handleResource() {
+        this.createResource();
+        this.resources = this.resources.filter(
+            (resource) => !resource.makedForDeletion
+        );
+
+        this.resources.forEach((resource) => resource.update());
+    }
+
+    handleFloatMessage() {
+        this.floatMessages = this.floatMessages.filter(
+            (floatMessage) => floatMessage.spanLife < 50
+        );
+
+        this.floatMessages.forEach((floatMessage) => floatMessage.update());
+    }
+
     createCells() {
         for (let i = 0; i < this.width; i += 100) {
-            for (let j = this.cellSize; j < this.height; j += 100) {
+            for (let j = 0; j < this.height; j += 100) {
                 this.cellGrid.push(new Cell(this, i, j));
             }
         }
@@ -160,7 +191,6 @@ class Game {
                         20
                     )
                 );
-
                 return;
             }
 
@@ -226,9 +256,15 @@ class Game {
 
     checkMousePositon() {
         this.canvas.addEventListener("mousemove", (e) => {
-            this.mouse.x = e.x - this.position.left;
-            this.mouse.y = e.y - this.position.top;
+            this.mouse.x = e.pageX - this.position.left;
+            this.mouse.y = e.pageY - this.position.top;
         });
+
+        // this.canvas.addEventListener("touchmove", (e) => {
+        //     this.mouse.x = e.touches[0].pageX - this.position.left;
+        //     this.mouse.y = e.touches[0].pageY - this.position.top;
+        //     // this.mouse.y = this.cellSize;
+        // });
 
         this.canvas.addEventListener("mouseleave", () => {
             this.mouse.x = undefined;
@@ -266,6 +302,13 @@ class Game {
         this.ctx.save();
         this.ctx.font = `600 50px Markazi`;
         this.ctx.textAlign = "center";
+        this.ctx.fillStyle = "#fbbf24";
+        this.ctx.fillRect(
+            this.width * 0.5 - this.width * 0.25,
+            this.height * 0.5 - this.height * 0.25,
+            this.width * 0.5,
+            this.height * 0.5
+        );
         this.ctx.fillStyle = "#fff";
         this.ctx.fillText("GAME OVER!", this.width * 0.5, this.height * 0.5);
         this.ctx.fillStyle = "#000";
@@ -274,7 +317,35 @@ class Game {
             this.width * 0.5 + 8,
             this.height * 0.5 + 5
         );
+        this.ctx.font = `600 30px Markazi`;
+        this.ctx.fillText(
+            `Your score is: ${this.score}`,
+            this.width * 0.5 + 8,
+            this.height * 0.5 + 50
+        );
         this.ctx.restore();
+
+        this.canvas.addEventListener("click", () => {
+            if (this.gameOver) {
+                this.handleResetGame();
+                this.update(0);
+            }
+        });
+    }
+
+    handleResetGame() {
+        this.numberOfResources = this.maxNumberOfResources;
+        this.deltaTime = 0;
+        this.lastTime = 0;
+        this.counter = this.maxCounter;
+        this.score = 0;
+        this.defenders = [];
+        this.enemies = [];
+        this.enemyTimer = 0;
+        this.resources = [];
+        this.resourceTimer = 0;
+        this.floatMessages = [];
+        this.gameOver = false;
     }
 
     handleResize() {
@@ -292,6 +363,17 @@ class Game {
             document.exitFullscreen();
         }
     }
+
+    getSeconds() {
+        const d = new Date();
+        return d.getSeconds();
+    }
 }
 
-const g = new Game();
+window.addEventListener("load", () => {
+    const btnPlay = document.getElementById("button-play");
+    btnPlay.addEventListener("click", () => {
+        const g = new Game();
+        btnPlay.style.display = "none";
+    });
+});

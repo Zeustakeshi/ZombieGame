@@ -9,9 +9,9 @@ import IdleDefender from "./states/idle.js";
 export default class Huntress extends Defender {
     constructor(game, x, y) {
         super(game, x, y);
-        this.spriteWidth = 100;
-        this.spriteHeight = 100;
-        this.rootSrc = "assets/defenders/Huntress 2";
+        this.spriteWidth = DEFENDER.huntress.spriteHeight;
+        this.spriteHeight = DEFENDER.huntress.spriteWidth;
+        this.rootSrc = DEFENDER.huntress.rootSrc;
         this.img.src = `${this.rootSrc}/Idle.png`;
 
         this.health = DEFENDER.huntress.health;

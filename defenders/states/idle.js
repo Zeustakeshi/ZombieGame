@@ -13,15 +13,9 @@ export default class IdleDefender extends Idle {
     handleChangeState() {
         if (this.character.isAtk) {
             this.character.game.enemies.forEach((enemy) => {
-                if (
-                    enemy.x <
-                    this.characterSkills[1]?.attackRange + this.character.x
-                ) {
+                if (enemy.x < this.characterSkills[0]?.attackRange) {
                     this.character.setState(states.ATK2);
-                } else if (
-                    enemy.x <
-                    this.characterSkills[0]?.attackRange + this.character.x
-                ) {
+                } else {
                     this.character.setState(states.ATK1);
                 }
             });
