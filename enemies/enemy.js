@@ -1,8 +1,6 @@
-import { ENEMY } from "./const.js";
-import FloatMessages from "./floatMessages.js";
-import { DieEnemy, RunEnemy } from "./states.js";
+import FloatMessages from "../floatMessages.js";
 
-class Enemy {
+export default class Enemy {
     constructor(game) {
         this.game = game;
         this.x = this.game.width + this.game.cellGap;
@@ -37,6 +35,7 @@ class Enemy {
         this.spriteHeight = this.game.cellSize;
         this.scale = 1;
         this.padding = 10;
+        this.skills = [];
     }
 
     draw() {
@@ -58,11 +57,15 @@ class Enemy {
 
     update() {
         this.x -= this.speed;
-        if (this.x < 0 || this.health <= 0) {
+        if (this.health <= 0) {
             this.speed = 0;
             setTimeout(() => {
                 this.makedForDeletion = true;
             }, 500);
+        }
+        if (this.x + this.width <= 0) {
+            this.makedForDeletion = true;
+            this.game.gameOver = true;
         }
 
         this.currentState.handleChangeState();
@@ -96,59 +99,3 @@ class Enemy {
         this.currentState.enter();
     }
 }
-
-export class Wiard extends Enemy {
-    constructor(game) {
-        super(game);
-        this.rootSrc = "assets/enemies/wizard";
-        this.img.src = `${this.rootSrc}/Run.png`;
-        this.maxFrameX = 2;
-        this.spriteWidth = 80;
-        this.spriteHeight = 80;
-        this.fps = 5;
-        this.interval = 1000 / this.fps;
-        this.scale = 1.5;
-        this.padding = 12;
-        this.states = [
-            null,
-            null,
-            null,
-            new DieEnemy(this, 9, 0),
-            new RunEnemy(this, 2, 0),
-        ];
-        this.currentState = this.states[4];
-        this.health = ENEMY.wiard.health;
-        this.dame = ENEMY.wiard.dame;
-        this.speed = ENEMY.wiard.speed;
-        this.movement = this.speed;
-    }
-}
-
-export class BolbMinion extends Enemy {
-    constructor(game) {
-        super(game);
-        this.rootSrc = "assets/enemies/blob-minion";
-        this.img.src = `${this.rootSrc}/Run.png`;
-        this.maxFrameX = 7;
-        this.spriteWidth = 80;
-        this.spriteHeight = 40;
-        this.fps = 10;
-        this.interval = 1000 / this.fps;
-        this.scale = 2;
-        this.padding = -8;
-        this.states = [
-            null,
-            null,
-            null,
-            new DieEnemy(this, 5, 0),
-            new RunEnemy(this, 7, 0),
-        ];
-        this.currentState = this.states[4];
-        this.health = ENEMY.bolbMinion.health;
-        this.dame = ENEMY.bolbMinion.dame;
-        this.speed = ENEMY.bolbMinion.speed;
-        this.movement = this.speed;
-    }
-}
-
-export default Enemy;

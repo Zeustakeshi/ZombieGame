@@ -1,11 +1,15 @@
-import { EvilWizard, Huntress, WizardPack, Worm } from "./defender.js";
-import Cell from "./cell.js";
-import { BolbMinion, Wiard } from "./enemy.js";
-import Resource from "./resource.js";
-import FloatMessages from "./floatMessages.js";
-import ControllBar from "./controllBar.js";
 import Background from "./backgound.js";
+import Cell from "./cell.js";
 import { GAME_HEIGHT, GAME_WIDTH } from "./const.js";
+import ControllBar from "./controllBar.js";
+import EvilWizard from "./defenders/evilWizard.js";
+import Huntress from "./defenders/huntress.js";
+import WizardPack from "./defenders/wizardPack.js";
+import Worm from "./defenders/worm.js";
+import BolbMinion from "./enemies/bolbMinion.js";
+import Wiard from "./enemies/wiard.js";
+import FloatMessages from "./floatMessages.js";
+import Resource from "./resource.js";
 
 class Game {
     constructor() {
@@ -62,9 +66,7 @@ class Game {
             this.toggleFullScreen();
         });
 
-        //update
         this.update(0);
-        // this.draw();
     }
 
     draw() {
@@ -106,7 +108,12 @@ class Game {
         this.floatMessages.forEach((floatMessage) => floatMessage.update());
         this.resources.forEach((resource) => resource.update());
         this.draw();
-        window.requestAnimationFrame(this.update.bind(this));
+
+        if (!this.gameOver) {
+            window.requestAnimationFrame(this.update.bind(this));
+        } else {
+            this.onGameOver();
+        }
     }
 
     createCells() {
@@ -253,6 +260,21 @@ class Game {
                 }
             });
         });
+    }
+
+    onGameOver() {
+        this.ctx.save();
+        this.ctx.font = `600 50px Markazi`;
+        this.ctx.textAlign = "center";
+        this.ctx.fillStyle = "#fff";
+        this.ctx.fillText("GAME OVER!", this.width * 0.5, this.height * 0.5);
+        this.ctx.fillStyle = "#000";
+        this.ctx.fillText(
+            "GAME OVER!",
+            this.width * 0.5 + 8,
+            this.height * 0.5 + 5
+        );
+        this.ctx.restore();
     }
 
     handleResize() {
